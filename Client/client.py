@@ -4,7 +4,8 @@ import os,hashlib,time,threading
 def get():
     while True:
         command = tcp.recv(1024).decode("utf-8")
-        if command = "add":
+        print(command)
+        if command == "add":
             res = tcp.recv(1024).decode("utf-8")
             if res == "True":
                 print("upload new data succeed!")

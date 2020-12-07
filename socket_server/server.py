@@ -5,6 +5,7 @@ def tcplink(sock,id):
     while True:
         try:
             command = sock.recv(1024).decode("utf-8")
+            print(command)
             clients[id][1] = 600
             clients[id][2] = 1
             if not command:
@@ -14,7 +15,8 @@ def tcplink(sock,id):
                 clients[id][0] = None
                 break
             if command == "add":
-                data = clients[id][0].recv(1024).decode("utf-8")
+                data = sock.recv(1024).decode("utf-8")
+                print(data)
                 body = json.loads(data)
                 sock.send("add".encode("utf-8"))
                 time.sleep(0.2)
