@@ -1,5 +1,5 @@
 from socket import *
-import sys,threading,time,pymysql
+import sys,threading,time,pymysql,json
 
 def tcplink(sock,id):
     while True:
@@ -13,6 +13,12 @@ def tcplink(sock,id):
                 clients[id][0].close()
                 clients[id][0] = None
                 break
+            if command == "add":
+                data = clients[id][0].recv(1024).decode("utf-8")
+                body = json.loads(data)
+                sock.send("add".encode("utf-8"))
+                time.sleep(0.2)
+                sock.send(sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+id+","+body["height"]+","+body["weight"]+","+body["muscle"]+")").encode("utf-8"))
             # if command == "" here response the request use send(str.encode()) to send response to client
         except:
             clients[id][2] = 1
@@ -58,7 +64,6 @@ def clock():
                     clients[client][0].close()
                     clients[client][0] = None
         time.sleep(1)
-        print(clients)
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
