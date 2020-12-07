@@ -95,6 +95,7 @@ if __name__ == "__main__":
             for row in infor:
                 if row[1] == password:
                     t = threading.Thread(target=tcplink,args=(client,row[0]))
+                    t.start()
                     client.send("1".encode("utf-8"))
                     clients[row[0]] = [client,600,1]
                 else:

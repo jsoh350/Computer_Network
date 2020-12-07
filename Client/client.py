@@ -4,7 +4,9 @@ import os,hashlib,time,threading
 def get():
     while True:
         command = tcp.recv(1024).decode("utf-8")
-        print(command)
+        if not command:
+            tcp.shutdown(2)
+            tcp.close()
         if command == "add":
             res = tcp.recv(1024).decode("utf-8")
             if res == "True":
@@ -28,7 +30,6 @@ def login():
         f = open("log","r")
         username = f.readline().replace("\n","")
         password = f.readline()
-        tcp.connect(addr)
         tcp.send("login".encode("utf-8"))
         time.sleep(0.2)
         tcp.send(username.encode("utf-8"))
@@ -51,7 +52,6 @@ def login():
         password = s.hexdigest()
         sex = input("Sex (1 boy/ 0 girl):")
 
-        tcp.connect(addr)
         tcp.send("sign up".encode("utf-8"))
         time.sleep(0.2)
         tcp.send(username.encode("utf-8"))
@@ -72,4 +72,5 @@ def login():
 if __name__ == "__main__":
     addr = ("140.143.126.73",2020)
     tcp = socket(AF_INET,SOCK_STREAM)
+    tcp.connect(addr)
     login()
