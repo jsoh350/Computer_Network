@@ -57,6 +57,8 @@ def clock():
                     clients[client][0].shutdown(2)
                     clients[client][0].close()
                     clients[client][0] = None
+        time.sleep(1)
+        print(clients)
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
