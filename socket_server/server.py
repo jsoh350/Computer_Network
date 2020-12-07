@@ -94,10 +94,10 @@ if __name__ == "__main__":
             infor = sqlSelect("select id,password from userinfo where username = '"+username+"';")
             for row in infor:
                 if row[1] == password:
-                    t = threading.Thread(target=tcplink,args=(client,row[0]))
+                    t = threading.Thread(target=tcplink,args=(client,str(row[0])))
                     t.start()
                     client.send("1".encode("utf-8"))
-                    clients[row[0]] = [client,600,1]
+                    clients[str(row[0])] = [client,600,1]
                 else:
                     client.send("0".encode("utf-8"))
                     client.shutdown(2)
