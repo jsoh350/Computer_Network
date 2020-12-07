@@ -1,7 +1,28 @@
 from socket import *
-import os,hashlib,time
+import os,hashlib,time,threading
 
-def login(tcp):
+def get():
+    while True:
+        command = tcp.recv(1024).decode("utf-8")
+        if command = "add":
+            res = tcp.recv(1024).decode("utf-8")
+            if res == "True":
+                print("upload new data succeed!")
+            else:
+                print("upload new data failed!")
+def send():
+    while True:
+        command = input(">>")
+        if command == "add":
+            height = input("height:")
+            weight = input("weight:")
+            muscle = input("muscle:")
+            data = '{"height":'+height+',"weight":'+weight+',"muscle":'+muscle+'}'
+            tcp.send("add".encode("utf-8"))
+            time.sleep(0.2)
+            tcp.send(data.encode("utf-8"))
+
+def login():
     if(os.path.exists("log")):
         f = open("log","r")
         username = f.readline().replace("\n","")
@@ -16,6 +37,11 @@ def login(tcp):
         if response == "0":
             tcp.shutdown(2)
             tcp.close()
+        else:
+            t = threading.Thread(target=get)
+            t.start()
+            t = threading.Thread(target=send)
+            t.start()
     else:
         s = hashlib.sha256()
         s.update(input("username:").encode())
@@ -45,4 +71,4 @@ def login(tcp):
 if __name__ == "__main__":
     addr = ("140.143.126.73",2020)
     tcp = socket(AF_INET,SOCK_STREAM)
-    login(tcp)
+    login()

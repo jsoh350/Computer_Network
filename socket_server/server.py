@@ -8,7 +8,7 @@ def tcplink(sock,id):
             clients[id][1] = 600
             clients[id][2] = 1
             if not command:
-                clients[id][2] = 1
+                clients[id][2] = 0
                 clients[id][0].shutdown(2)
                 clients[id][0].close()
                 clients[id][0] = None
