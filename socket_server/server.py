@@ -45,7 +45,8 @@ def tcplink(sock,id):
                 body = json.loads(data)
                 sock.send("add".encode("utf-8"))
                 time.sleep(0.2)
-                sock.send(sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+id+","+body["height"]+","+body["weight"]+","+body["muscle"]+")").encode("utf-8"))
+                insert = sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+id+","+body["height"]+","+body["weight"]+","+body["muscle"]+")")
+                sock.send(insert.encode("utf-8"))
             # if command == "" here response the request use send(str.encode()) to send response to client
         except:
             clients[id][2] = 1
