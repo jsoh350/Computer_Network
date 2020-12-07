@@ -82,16 +82,16 @@ if __name__ == "__main__":
             username = client.recv(1024).decode("utf-8")
             password = client.recv(1024).decode("utf-8")
 
-            infor = sqlSelect("select id,password from userinfor where username = "+username)
+            infor = sqlSelect("select id,password from userinfo where username = '"+username+"';")
             for row in infor:
                 if row[1] == password:
                     t = threading.Thread(target=tcplink,args=(client,row[0]))
                     client.send("1".encode("utf-8"))
                     clients[row[0]] = [client,600,1]
-            else:
-                client.send("0".encode("utf-8"))
-                client.shutdown(2)
-                client.close()
+                else:
+                    client.send("0".encode("utf-8"))
+                    client.shutdown(2)
+                    client.close()
         elif type == "sign up":
             username = client.recv(1024).decode("utf-8")
             password = client.recv(1024).decode("utf-8")
