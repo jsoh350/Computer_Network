@@ -4,9 +4,6 @@ import os,hashlib,time,threading
 def get():
     while True:
         command = tcp.recv(1024).decode("utf-8")
-        if not command:
-            tcp.shutdown(2)
-            tcp.close()
         if command == "add":
             res = tcp.recv(1024).decode("utf-8")
             if res == "True":
