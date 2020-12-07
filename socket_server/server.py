@@ -41,11 +41,11 @@ def sqlInsertOrUpdateOrDelete(sql):
         cursor.execute(sql)
         db.commit()
         db.close()
-        return True
+        return "True"
     except:
         db.rollback()
         db.close()
-        return False
+        return "False"
 
 def clock():
     while True:
@@ -77,13 +77,27 @@ if __name__ == "__main__":
     while True:
         client, address = tcp.accept()
 
-        id = client.recv(1024).decode("utf-8")
-        password = client.recv(1024).decode("utf-8")
+        type = client.recv(1024).decode("utf-8")
+        if type == "login":
+            username = client.recv(1024).decode("utf-8")
+            password = client.recv(1024).decode("utf-8")
 
-        if sqlSelect("select password from user where id = "+id)[0][0] == password:#here I didn't test the typt of result. 
-            t = threading.Thread(target=tcplink,args=(client,id))
-            clients[id] = [client,600,1]
-        else:
+            infor = sqlSelect("select id,password from userinfor where username = "+username)
+            if infor[0][1] == password:#here I didn't test the typt of result. 
+                t = threading.Thread(target=tcplink,args=(client,infor[0][0]))
+                client.send("1".encode("utf-8"))
+                clients[infor[0][0]] = [client,600,1]
+            else:
+                client.send("0".encode("utf-8"))
+                client.shutdown(2)
+                client.close()
+        elif type == "sign up":
+            username = client.recv(1024).decode("utf-8")
+            password = client.recv(1024).decode("utf-8")
+            sex = client.recv(1024).decode("utf-8")
+            client.send(sqlInsertOrUpdateOrDelete("insert into userinfo(username,password,sex) value('"+username+"','"+password+"',"+sex+")").encode("utf-8"))
             client.shutdown(2)
             client.close()
+            
+
 
