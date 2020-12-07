@@ -22,7 +22,7 @@ def login(tcp):
         username = s.hexdigest()
         s.update(input("password:").encode())
         password = s.hexdigest()
-        sex = int(input("Sex (1 boy/ 0 girl):"))
+        sex = input("Sex (1 boy/ 0 girl):")
 
         tcp.connect(addr)
         tcp.send("sign up".encode("utf-8"))

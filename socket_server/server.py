@@ -83,10 +83,11 @@ if __name__ == "__main__":
             password = client.recv(1024).decode("utf-8")
 
             infor = sqlSelect("select id,password from userinfor where username = "+username)
-            if infor[0][1] == password:#here I didn't test the typt of result. 
-                t = threading.Thread(target=tcplink,args=(client,infor[0][0]))
-                client.send("1".encode("utf-8"))
-                clients[infor[0][0]] = [client,600,1]
+            for row in infor:
+                if row[1] == password:
+                    t = threading.Thread(target=tcplink,args=(client,row[0]))
+                    client.send("1".encode("utf-8"))
+                    clients[row[0]] = [client,600,1]
             else:
                 client.send("0".encode("utf-8"))
                 client.shutdown(2)
