@@ -30,7 +30,6 @@ def tcplink(sock,id):
     while True:
         try:
             command = sock.recv(1024).decode("utf-8")
-            print(command)
             clients[id][1] = 600
             clients[id][2] = 1
             if not command:
@@ -41,12 +40,22 @@ def tcplink(sock,id):
                 break
             if command == "add":
                 data = sock.recv(1024).decode("utf-8")
-                print(data)
                 body = json.loads(data)
                 sock.send("add".encode("utf-8"))
                 time.sleep(0.2)
-                insert = sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+id+","+body["height"]+","+body["weight"]+","+body["muscle"]+")")
+                insert = sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+str(id)+","+str(body["height"])+","+str(body["weight"])+","+str(body["muscle"])+")")
                 sock.send(insert.encode("utf-8"))
+            elif command == "get":
+                select = sqlSelect("select * from bodydata where userid="+id+" order by uploaddate")
+                res = list()
+                for row in select:
+                    temp = list()
+                    temp.appand(row[2])
+                    temp.appand(row[3])
+                    temp.appand(row[4])
+                    temp.appand(row[5])
+                    res.append(temp)
+                sock.send(str(res).encode("utf-8"))
             # if command == "" here response the request use send(str.encode()) to send response to client
         except:
             clients[id][2] = 1
