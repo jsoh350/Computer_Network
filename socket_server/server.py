@@ -1,6 +1,31 @@
 from socket import *
 import sys,threading,time,pymysql,json
 
+def sqlSelect(sql):
+    db = pymysql.connect("localhost","public","abc123abc123","socket")
+    cursor = db.cursor()
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        db.close()
+        return results
+    except:
+        db.close()
+        return "something wrong!"
+
+def sqlInsertOrUpdateOrDelete(sql):
+    db = pymysql.connect("localhost","public","abc123abc123","socket")
+    cursor = db.cursor()
+    try:
+        cursor.execute(sql)
+        db.commit()
+        db.close()
+        return "True"
+    except:
+        db.rollback()
+        db.close()
+        return "False"
+
 def tcplink(sock,id):
     while True:
         try:
@@ -28,32 +53,6 @@ def tcplink(sock,id):
             clients[id][0].close()
             clients[id][0] = None
             break
-
-
-def sqlSelect(sql):
-    db = pymysql.connect("localhost","public","abc123abc123","socket")
-    cursor = db.cursor()
-    try:
-        cursor.execute(sql)
-        results = cursor.fetchall()
-        db.close()
-        return results
-    except:
-        db.close()
-        return "something wrong!"
-
-def sqlInsertOrUpdateOrDelete(sql):
-    db = pymysql.connect("localhost","public","abc123abc123","socket")
-    cursor = db.cursor()
-    try:
-        cursor.execute(sql)
-        db.commit()
-        db.close()
-        return "True"
-    except:
-        db.rollback()
-        db.close()
-        return "False"
 
 def clock():
     while True:
