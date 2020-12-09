@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         Button signin_btn = findViewById(R.id.toSignIn);
         Button signup_btn = findViewById(R.id.toSignUp);
         TextView status = findViewById(R.id.connect_state);
-        TextView welcome = findViewById(R.id.welcome);
 
         SharedPreferences userInfo = getSharedPreferences("userInfo",MODE_PRIVATE);
         String username = userInfo.getString("username","");
@@ -35,18 +34,11 @@ public class MainActivity extends AppCompatActivity {
         if(username.equals("")){
             signin_btn.setVisibility(View.VISIBLE);
             signup_btn.setVisibility(View.VISIBLE);
-            welcome.setVisibility(View.GONE);
         }else {
             signin_btn.setVisibility(View.GONE);
             signup_btn.setVisibility(View.GONE);
-            welcome.setVisibility(View.VISIBLE);
             TcpClient.startClient(status);
-            EventBus.getDefault().post(new SendMessage("login"));
-            sleep();
-            EventBus.getDefault().post(new SendMessage(username));
-            sleep();
-            EventBus.getDefault().post(new SendMessage(password));
-            welcome.setText("Welcome "+username);
+            TcpClient.SendMessage("login"+username+" "+password);
         }
         startListen();
     }
@@ -79,17 +71,4 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(messageEvent.message);
     }
 
-    private void sleep(){
-        new Thread(){
-            public void run(){
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                finish();
-            }
-        }.start();
-    }
 }

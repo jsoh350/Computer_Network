@@ -1,5 +1,7 @@
 package com.example.sw;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +19,8 @@ import org.greenrobot.eventbus.ThreadMode;
 public class SignPage extends AppCompatActivity {
 
     protected String type;
+    String username;
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -62,8 +66,8 @@ public class SignPage extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = new MD5Utils().bin2hex(un.getText().toString());
-                String password = new MD5Utils().bin2hex(pw.getText().toString());
+                username = new MD5Utils().bin2hex(un.getText().toString());
+                password = new MD5Utils().bin2hex(pw.getText().toString());
 
                 String inner = type+username+" "+password;
                 if(type.equals("sign up")){
@@ -86,6 +90,14 @@ public class SignPage extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ShowResponse(ShowResponse messageEvent){
         System.out.println(messageEvent.message);
+        if(messageEvent.message.equals("True")){
+            SharedPreferences.Editor editor = getSharedPreferences("userInfo",MODE_PRIVATE).edit();
+            editor.putString("username",username);
+            editor.putString("password",password);
+            editor.commit();
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+        }
     }
 
 }
