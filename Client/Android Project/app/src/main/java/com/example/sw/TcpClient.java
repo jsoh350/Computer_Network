@@ -30,19 +30,18 @@ public class TcpClient {
                         socket = new Socket(address,port);
                         status.setText("Socket Connected!");
                         status.setTextColor(Color.parseColor("#9DCC6B"));
-                        while(true){
-                            PrintWriter pw = new PrintWriter(socket.getOutputStream());
-                            InputStream inputStream = socket.getInputStream();
-                            byte[] buffer = new byte[1024];
-                            int len = -1;
 
-                            while ((len = inputStream.read(buffer)) != -1){
-                                String data = new String(buffer, 0, len);
-                                EventBus.getDefault().post(new ShowResponse(data));
-                            }
+                        PrintWriter pw = new PrintWriter(socket.getOutputStream());
+                        InputStream inputStream = socket.getInputStream();
+                        byte[] buffer = new byte[1024];
+                        int len = -1;
 
-                            pw.close();
+                        while ((len = inputStream.read(buffer)) != -1){
+                            String data = new String(buffer, 0, len);
+                            EventBus.getDefault().post(new ShowResponse(data));
                         }
+
+                        pw.close();
 
 
                     } catch (Exception EE) {
@@ -64,14 +63,15 @@ public class TcpClient {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public static void SendMessage(SendMessage messageEvent){
+    public static void SendMessage(String message){
+        System.out.println(message);
         if (socket != null && socket.isConnected()) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        socket.getOutputStream().write(messageEvent.message.getBytes());
+                        System.out.println(message);
+                        socket.getOutputStream().write(message.getBytes());
                         socket.getOutputStream().flush();
                     } catch (IOException e) {
                         e.printStackTrace();

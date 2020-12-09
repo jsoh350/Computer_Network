@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        EventBus.getDefault().register(this);
+
         Button signin_btn = findViewById(R.id.toSignIn);
         Button signup_btn = findViewById(R.id.toSignUp);
         TextView status = findViewById(R.id.connect_state);
@@ -45,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             EventBus.getDefault().post(new SendMessage(password));
             welcome.setText("Welcome "+username);
         }
-        EventBus.getDefault().register(this);
         startListen();
     }
 
@@ -77,11 +79,17 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(messageEvent.message);
     }
 
-    private static void sleep(){
-        try{
-            Thread.currentThread().sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void sleep(){
+        new Thread(){
+            public void run(){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                finish();
+            }
+        }.start();
     }
 }

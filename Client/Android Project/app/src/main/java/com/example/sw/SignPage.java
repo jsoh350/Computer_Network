@@ -15,13 +15,17 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class SignPage extends AppCompatActivity {
+
     protected String type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_page);
 
         listener();
+
+        EventBus.getDefault().register(this);
 
         type = getIntent().getStringExtra("type");
 
@@ -53,28 +57,28 @@ public class SignPage extends AppCompatActivity {
         EditText pw = findViewById(R.id.password);
         Button submit = findViewById(R.id.submit);
         TextView status = findViewById(R.id.connect_state);
+        TcpClient.startClient(status);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = new MD5Utils().digest(un.getText().toString());
                 String password = new MD5Utils().digest(pw.getText().toString());
-                TcpClient.startClient(status);
-                EventBus.getDefault().post(new SendMessage(type));
-                sleep();
-                EventBus.getDefault().post(new SendMessage(username));
-                sleep();
+
+                String inner = type+username+" "+password;
                 if(type.equals("sign up")){
                     RadioButton male = findViewById(R.id.male);
                     RadioButton female = findViewById(R.id.female);
                     if(male.isChecked()==false&&female.isChecked()==false){
                         return;
                     }else if(male.isChecked()){
-                        EventBus.getDefault().post(new SendMessage("1"));
+                        inner += "1";
                     }else{
-                        EventBus.getDefault().post(new SendMessage("0"));
+                        inner += "0";
                     }
                 }
+
+                TcpClient.SendMessage(inner);
             }
         });
     }
@@ -84,11 +88,4 @@ public class SignPage extends AppCompatActivity {
         System.out.println(messageEvent.message);
     }
 
-    private static void sleep(){
-        try{
-            Thread.currentThread().sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }
