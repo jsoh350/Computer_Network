@@ -96,8 +96,8 @@ if __name__ == "__main__":
         client, address = tcp.accept()
 
         type = client.recv(1024).decode("utf-8")
-        if type == "login":
-            username = client.recv(1024).decode("utf-8")
+        if type[:5] == "login":
+            username = 
             password = client.recv(1024).decode("utf-8")
 
             infor = sqlSelect("select id,password from userinfo where username = '"+username+"';")
@@ -111,10 +111,10 @@ if __name__ == "__main__":
                     client.send("0".encode("utf-8"))
                     client.shutdown(2)
                     client.close()
-        elif type == "sign up":
-            username = client.recv(1024).decode("utf-8")
-            password = client.recv(1024).decode("utf-8")
-            sex = client.recv(1024).decode("utf-8")
+        elif type[:7] == "sign up":
+            username = type[8:39]
+            password = type[41:72]
+            sex = type[-1]
             client.send(sqlInsertOrUpdateOrDelete("insert into userinfo(username,password,sex) value('"+username+"','"+password+"',"+sex+")").encode("utf-8"))
             client.shutdown(2)
             client.close()
