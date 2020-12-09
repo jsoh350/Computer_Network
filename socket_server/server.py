@@ -97,8 +97,8 @@ if __name__ == "__main__":
 
         type = client.recv(1024).decode("utf-8")
         if type[:5] == "login":
-            username = 
-            password = client.recv(1024).decode("utf-8")
+            username = type[6:35]
+            password = type[37:]
 
             infor = sqlSelect("select id,password from userinfo where username = '"+username+"';")
             for row in infor:
