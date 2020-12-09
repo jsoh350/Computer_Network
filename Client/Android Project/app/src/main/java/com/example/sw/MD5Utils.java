@@ -1,25 +1,25 @@
 package com.example.sw;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MD5Utils {
-    public static String digest(String password) {
+    private static byte [] getHash(String password) {
+        MessageDigest digest = null ;
         try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] bytes = digest.digest(password.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : bytes) {
-                int c = b & 0xff;
-                String result = Integer.toHexString(c);
-                if(result.length()<2){
-                    sb.append(0);
-                }
-                sb.append(result);
-            }
-            return sb.toString();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return "";
+            digest = MessageDigest. getInstance( "SHA-256");
+        } catch (NoSuchAlgorithmException e1) {
+            e1.printStackTrace();
         }
+        digest.reset();
+        return digest.digest(password.getBytes());
     }
+
+    public static String bin2hex(String strForEncrypt) {
+        byte [] data = getHash(strForEncrypt);
+        return String.format( "%0" + (data.length * 2) + "X", new BigInteger(1, data));
+    }
+
 }

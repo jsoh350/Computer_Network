@@ -64,7 +64,6 @@ public class TcpClient {
     }
 
     public static void SendMessage(String message){
-        System.out.println(message);
         if (socket != null && socket.isConnected()) {
             new Thread(new Runnable() {
                 @Override

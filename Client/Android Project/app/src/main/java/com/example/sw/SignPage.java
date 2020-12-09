@@ -62,8 +62,8 @@ public class SignPage extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = new MD5Utils().digest(un.getText().toString());
-                String password = new MD5Utils().digest(pw.getText().toString());
+                String username = new MD5Utils().bin2hex(un.getText().toString());
+                String password = new MD5Utils().bin2hex(pw.getText().toString());
 
                 String inner = type+username+" "+password;
                 if(type.equals("sign up")){
