@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SW</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="socket_not_connected">Socket Not Connected</string>
+    <string name="socket_connected">Socket Connected</string>
 </resources>
