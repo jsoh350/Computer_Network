@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         Button signup_btn = findViewById(R.id.toSignUp);
         Button signout_btn = findViewById(R.id.logout);
         Button add = findViewById(R.id.add);
+        EditText height = findViewById(R.id.height);
+        EditText weight = findViewById(R.id.weight);
+        EditText muscle = findViewById(R.id.muscle);
 
         signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("username","");
                 editor.putString("password","");
                 editor.commit();
+                TcpClient.SendMessage("logout");
                 Intent intent = new Intent(MainActivity.this,MainActivity.class);
                 startActivity(intent);
             }
@@ -88,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                 String data = "add{'height':" + height.getText().toString() + ",'weight':" + weight.getText().toString() + ",'muscle':" + muscle.getText().toString() + "}";
+                 TcpClient.SendMessage(data);
             }
         });
     }

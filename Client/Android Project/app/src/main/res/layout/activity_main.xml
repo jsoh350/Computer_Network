@@ -44,7 +44,7 @@
         android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="650dp"
         android:text="@string/add_btn"
         app:layout_constraintEnd_toStartOf="@+id/logout"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +54,44 @@
         android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="650dp"
         android:text="@string/sign_out"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/height"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="600dp"
+        android:hint="HEIGHT(cm)"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@id/weight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/weight"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="600dp"
+        android:hint="WEIGHT(g)"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@id/muscle"
+        app:layout_constraintStart_toEndOf="@id/height"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/muscle"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="600dp"
+        android:hint="MUSCLE(%)"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/weight"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

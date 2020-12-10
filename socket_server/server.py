@@ -42,7 +42,7 @@ def tcplink(sock,id):
                 data = command[4:]
                 body = json.loads(data)
                 insert = sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+str(id)+","+str(body["height"])+","+str(body["weight"])+","+str(body["muscle"])+")")
-                sock.send("add"+insert.encode("utf-8"))
+                sock.send(("add"+insert).encode("utf-8"))
             elif command == "get":
                 select = sqlSelect("select * from bodydata where userid="+id+" order by uploaddate")
                 res = list()
