@@ -104,7 +104,7 @@ if __name__ == "__main__":
                 if row[1] == password:
                     i +=1
                     break
-            if i == 1
+            if i == 1:
                 client.send("logined".encode("utf-8"))
                 clients[str(row[0])] = [client,600,1]
                 t = threading.Thread(target=tcplink,args=(client,str(row[0])))
