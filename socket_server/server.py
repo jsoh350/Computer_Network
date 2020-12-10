@@ -38,13 +38,11 @@ def tcplink(sock,id):
                 clients[id][0].close()
                 clients[id][0] = None
                 break
-            if command == "add":
-                data = sock.recv(1024).decode("utf-8")
+            if command[:3] == "add":
+                data = command[4:]
                 body = json.loads(data)
-                sock.send("add".encode("utf-8"))
-                time.sleep(0.2)
                 insert = sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+str(id)+","+str(body["height"])+","+str(body["weight"])+","+str(body["muscle"])+")")
-                sock.send(insert.encode("utf-8"))
+                sock.send("add"+insert.encode("utf-8"))
             elif command == "get":
                 select = sqlSelect("select * from bodydata where userid="+id+" order by uploaddate")
                 res = list()
@@ -56,6 +54,12 @@ def tcplink(sock,id):
                     temp.appand(row[5])
                     res.append(temp)
                 sock.send(str(res).encode("utf-8"))
+            elif command == "logout":
+                clients[id][2] = 0
+                clients[id][0].shutdown(2)
+                clients[id][0].close()
+                clients[id][0] = None
+                break
             # if command == "" here response the request use send(str.encode()) to send response to client
         except:
             clients[id][2] = 1
@@ -107,10 +111,25 @@ if __name__ == "__main__":
                     t.start()
                     client.send("1".encode("utf-8"))
                     clients[str(row[0])] = [client,600,1]
+                    break
                 else:
                     client.send("0".encode("utf-8"))
                     client.shutdown(2)
                     client.close()
+        elif type[:7] == "sign in":
+            username = type[8:71]
+            password = type[73:136]
+            infor = sqlSelect("select id,password from userinfo where username = '"+username+"';")
+            d = 0
+            for row in infor:
+                if row[1] == password:
+                    if row[1] == password:
+                        d += 1
+                        break
+            if d == 0:
+                client.send("False".encode("utf-8"))
+            else:
+                client.send("True".encode("utf-8"))
         elif type[:7] == "sign up":
             username = type[8:71]
             password = type[73:136]

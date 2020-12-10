@@ -33,7 +33,7 @@ public class SignPage extends AppCompatActivity {
 
         type = getIntent().getStringExtra("type");
 
-        if(type.equals("login")){
+        if(type.equals("sign in")){
             signin();
         }else if(type.equals("sign up")){
             signup();

@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button signin_btn = findViewById(R.id.toSignIn);
         Button signup_btn = findViewById(R.id.toSignUp);
+        Button signout_btn = findViewById(R.id.logout);
+        Button add = findViewById(R.id.add);
         TextView status = findViewById(R.id.connect_state);
 
         SharedPreferences userInfo = getSharedPreferences("userInfo",MODE_PRIVATE);
@@ -34,9 +36,13 @@ public class MainActivity extends AppCompatActivity {
         if(username.equals("")){
             signin_btn.setVisibility(View.VISIBLE);
             signup_btn.setVisibility(View.VISIBLE);
+            signout_btn.setVisibility(View.GONE);
+            add.setVisibility(View.GONE);
         }else {
             signin_btn.setVisibility(View.GONE);
             signup_btn.setVisibility(View.GONE);
+            signout_btn.setVisibility(View.VISIBLE);
+            add.setVisibility(View.VISIBLE);
             TcpClient.startClient(status);
             TcpClient.SendMessage("login"+username+" "+password);
         }
@@ -46,12 +52,14 @@ public class MainActivity extends AppCompatActivity {
     private void startListen(){
         Button signin_btn = findViewById(R.id.toSignIn);
         Button signup_btn = findViewById(R.id.toSignUp);
+        Button signout_btn = findViewById(R.id.logout);
+        Button add = findViewById(R.id.add);
 
         signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SignPage.class);
-                intent.putExtra("type","login");
+                intent.putExtra("type","sign in");
                 startActivity(intent);
             }
         });
@@ -62,6 +70,25 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,SignPage.class);
                 intent.putExtra("type","sign up");
                 startActivity(intent);
+            }
+        });
+
+        signout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = getSharedPreferences("userInfo",MODE_PRIVATE).edit();
+                editor.putString("username","");
+                editor.putString("password","");
+                editor.commit();
+                Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

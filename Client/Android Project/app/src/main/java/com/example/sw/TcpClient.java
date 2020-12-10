@@ -69,7 +69,6 @@ public class TcpClient {
                 @Override
                 public void run() {
                     try {
-                        System.out.println(message);
                         socket.getOutputStream().write(message.getBytes());
                         socket.getOutputStream().flush();
                     } catch (IOException e) {
