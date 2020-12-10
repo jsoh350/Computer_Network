@@ -44,8 +44,8 @@ def tcplink(sock,id):
                 insert = sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+str(id)+","+str(body["height"])+","+str(body["weight"])+","+str(body["muscle"])+")")
                 sock.send(("add"+insert).encode("utf-8"))
             elif command == "get":
-                select = sqlSelect("select * from bodydata where userid="+id+" order by uploaddate limit 1")
-                
+                select = sqlSelect("select height,weight from bodydata where userid="+id+" order by uploaddate limit 1")
+                res = round(select[0][1]/(select[0][0]*2),2)
                 sock.send(str(res).encode("utf-8"))
             elif command == "logout":
                 clients[id][2] = 0
@@ -101,10 +101,10 @@ if __name__ == "__main__":
             infor = sqlSelect("select id,password from userinfo where username = '"+username+"';")
             for row in infor:
                 if row[1] == password:
-                    t = threading.Thread(target=tcplink,args=(client,str(row[0])))
-                    t.start()
                     client.send("logined".encode("utf-8"))
                     clients[str(row[0])] = [client,600,1]
+                    t = threading.Thread(target=tcplink,args=(client,str(row[0])))
+                    t.start()
                     break
                 else:
                     client.send("unlogined".encode("utf-8"))
