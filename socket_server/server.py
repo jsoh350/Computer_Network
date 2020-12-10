@@ -99,17 +99,20 @@ if __name__ == "__main__":
             password = type[71:134]
 
             infor = sqlSelect("select id,password from userinfo where username = '"+username+"';")
+            i = 0
             for row in infor:
                 if row[1] == password:
-                    client.send("logined".encode("utf-8"))
-                    clients[str(row[0])] = [client,600,1]
-                    t = threading.Thread(target=tcplink,args=(client,str(row[0])))
-                    t.start()
+                    i +=1
                     break
-                else:
-                    client.send("unlogined".encode("utf-8"))
-                    client.shutdown(2)
-                    client.close()
+            if i == 1
+                client.send("logined".encode("utf-8"))
+                clients[str(row[0])] = [client,600,1]
+                t = threading.Thread(target=tcplink,args=(client,str(row[0])))
+                t.start()
+            else:
+                client.send("unlogined".encode("utf-8"))
+                client.shutdown(2)
+                client.close()
         elif type[:7] == "sign in":
             username = type[8:71]
             password = type[73:136]
