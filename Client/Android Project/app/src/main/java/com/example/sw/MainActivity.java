@@ -118,6 +118,13 @@ public class MainActivity extends AppCompatActivity {
                 TcpClient.SendMessage(data);
             }
         });
+
+        bmi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TcpClient.SendMessage("get");
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
