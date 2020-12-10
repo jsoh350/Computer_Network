@@ -39,20 +39,13 @@ def tcplink(sock,id):
                 clients[id][0] = None
                 break
             if command[:3] == "add":
-                data = command[4:]
-                body = json.loads(data)
+                data = command[3:]
+                body = json.loads(data.replace('\'','\"'))
                 insert = sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+str(id)+","+str(body["height"])+","+str(body["weight"])+","+str(body["muscle"])+")")
                 sock.send(("add"+insert).encode("utf-8"))
             elif command == "get":
-                select = sqlSelect("select * from bodydata where userid="+id+" order by uploaddate")
-                res = list()
-                for row in select:
-                    temp = list()
-                    temp.appand(row[2])
-                    temp.appand(row[3])
-                    temp.appand(row[4])
-                    temp.appand(row[5])
-                    res.append(temp)
+                select = sqlSelect("select * from bodydata where userid="+id+" order by uploaddate limit 1")
+                
                 sock.send(str(res).encode("utf-8"))
             elif command == "logout":
                 clients[id][2] = 0
@@ -100,6 +93,7 @@ if __name__ == "__main__":
         client, address = tcp.accept()
 
         type = client.recv(1024).decode("utf-8")
+        print(type)
         if type[:5] == "login":
             username = type[6:69]
             password = type[71:134]
