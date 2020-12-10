@@ -44,11 +44,11 @@ def tcplink(sock,id):
                 insert = sqlInsertOrUpdateOrDelete("insert into bodydata(userid,height,weight,muscle) value("+str(id)+","+str(body["height"])+","+str(body["weight"])+","+str(body["muscle"])+")")
                 sock.send(("add"+insert).encode("utf-8"))
             elif command == "get":
-                select = sqlSelect("select height,weight from bodydata where userid="+id+" order by uploaddate limit 1;")
+                select = sqlSelect("select height,weight from bodydata where userid="+id+" order by uploaddate desc limit 1;")
                 if select == "something wrong!" or len(select) == 0:
                     sock.send("NO DATA!".encode("utf-8"))
                 else:
-                    res = round(select[0][1]/(select[0][0]*2),2)
+                    res = round(select[0][1]/(10*(select[0][0]*2)),2)
                     sock.send(str(res).encode("utf-8"))
             elif command == "logout":
                 clients[id][2] = 0
