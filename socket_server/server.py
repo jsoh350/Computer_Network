@@ -49,7 +49,7 @@ def tcplink(sock,id):
                     sock.send("NO DATA!".encode("utf-8"))
                 else:
                     res = round(select[0][1]/(10*(select[0][0]*2)),2)
-                    sock.send(str(res).encode("utf-8"))
+                    sock.send(("BMI:"+str(res)).encode("utf-8"))
             elif command == "logout":
                 clients[id][2] = 0
                 clients[id][0].shutdown(2)
