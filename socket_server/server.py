@@ -109,11 +109,11 @@ if __name__ == "__main__":
                 if row[1] == password:
                     t = threading.Thread(target=tcplink,args=(client,str(row[0])))
                     t.start()
-                    client.send("1".encode("utf-8"))
+                    client.send("logined".encode("utf-8"))
                     clients[str(row[0])] = [client,600,1]
                     break
                 else:
-                    client.send("0".encode("utf-8"))
+                    client.send("unlogined".encode("utf-8"))
                     client.shutdown(2)
                     client.close()
         elif type[:7] == "sign in":

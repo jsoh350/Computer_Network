@@ -29,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
         Button signout_btn = findViewById(R.id.logout);
         Button add = findViewById(R.id.add);
         TextView status = findViewById(R.id.connect_state);
+        EditText height = findViewById(R.id.height);
+        EditText weight = findViewById(R.id.weight);
+        EditText muscle = findViewById(R.id.muscle);
+
+        TcpClient.startClient(status);
 
         SharedPreferences userInfo = getSharedPreferences("userInfo",MODE_PRIVATE);
         String username = userInfo.getString("username","");
@@ -39,25 +44,20 @@ public class MainActivity extends AppCompatActivity {
             signup_btn.setVisibility(View.VISIBLE);
             signout_btn.setVisibility(View.GONE);
             add.setVisibility(View.GONE);
+            height.setVisibility(View.GONE);
+            weight.setVisibility(View.GONE);
+            muscle.setVisibility(View.GONE);
         }else {
             signin_btn.setVisibility(View.GONE);
             signup_btn.setVisibility(View.GONE);
             signout_btn.setVisibility(View.VISIBLE);
             add.setVisibility(View.VISIBLE);
-            TcpClient.startClient(status);
+            height.setVisibility(View.VISIBLE);
+            weight.setVisibility(View.VISIBLE);
+            muscle.setVisibility(View.VISIBLE);
+
             TcpClient.SendMessage("login"+username+" "+password);
         }
-        startListen();
-    }
-
-    private void startListen(){
-        Button signin_btn = findViewById(R.id.toSignIn);
-        Button signup_btn = findViewById(R.id.toSignUp);
-        Button signout_btn = findViewById(R.id.logout);
-        Button add = findViewById(R.id.add);
-        EditText height = findViewById(R.id.height);
-        EditText weight = findViewById(R.id.weight);
-        EditText muscle = findViewById(R.id.muscle);
 
         signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 String data = "add{'height':" + height.getText().toString() + ",'weight':" + weight.getText().toString() + ",'muscle':" + muscle.getText().toString() + "}";
-                 TcpClient.SendMessage(data);
+                String data = "add{'height':" + height.getText().toString() + ",'weight':" + weight.getText().toString() + ",'muscle':" + muscle.getText().toString() + "}";
+                TcpClient.SendMessage(data);
             }
         });
     }

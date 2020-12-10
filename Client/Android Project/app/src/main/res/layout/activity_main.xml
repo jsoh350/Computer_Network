@@ -67,6 +67,7 @@
         android:layout_marginTop="600dp"
         android:hint="HEIGHT(cm)"
         android:inputType="number"
+        android:textSize="10sp"
         app:layout_constraintEnd_toStartOf="@id/weight"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -78,6 +79,7 @@
         android:layout_marginTop="600dp"
         android:hint="WEIGHT(g)"
         android:inputType="number"
+        android:textSize="10sp"
         app:layout_constraintEnd_toStartOf="@id/muscle"
         app:layout_constraintStart_toEndOf="@id/height"
         app:layout_constraintTop_toTopOf="parent" />
@@ -89,6 +91,7 @@
         android:layout_marginTop="600dp"
         android:hint="MUSCLE(%)"
         android:inputType="number"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/weight"
         app:layout_constraintTop_toTopOf="parent" />
