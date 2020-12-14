@@ -97,6 +97,8 @@ if __name__ == "__main__":
 
         type = client.recv(1024).decode("utf-8")
         print(type)
+        if not type:
+            continue
         if type[:5] == "login":
             username = type[6:69]
             password = type[71:134]
